@@ -62,3 +62,6 @@ crashlytics-build.properties
 # Temporary
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+Assets/Tests/Tests.asmdef
+Assets/Tests.meta
+Assets/Tests/Tests.asmdef.meta

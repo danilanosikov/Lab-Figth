@@ -583,6 +583,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3623661203436047335, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623661203436047335, guid: e724896b1d8304365806710abbaff55f,
+        type: 3}
       propertyPath: stiffness
       value: 100
       objectReference: {fileID: 0}
@@ -678,13 +683,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902540, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
+      propertyPath: damping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904345421717902540, guid: e724896b1d8304365806710abbaff55f,
+        type: 3}
+      propertyPath: accuracy
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904345421717902540, guid: e724896b1d8304365806710abbaff55f,
+        type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904345421717902540, guid: e724896b1d8304365806710abbaff55f,
+        type: 3}
+      propertyPath: stiffness
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902542, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_Constraints
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
