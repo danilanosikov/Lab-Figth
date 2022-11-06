@@ -293,3 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c366afb871e496098b374e28e1a905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floatHight: 1
+  stiffness: 100
+  damping: 100
+  forceMultiplier: 1
