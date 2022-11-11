@@ -1,3 +1,17 @@
 {
-	"name": "Floatlands"
+    "name": "Floatlands",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a43c53ac4d1504c6a9dee0d7783da00a",
+        "GUID:3169ed20807c14585bef01331c0f5787"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
