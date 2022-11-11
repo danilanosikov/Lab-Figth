@@ -481,7 +481,7 @@ Transform:
   m_GameObject: {fileID: 756472291}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.2374, y: 2.2374, z: 2.2374}
+  m_LocalScale: {x: 54.940903, y: 54.940903, z: 54.940903}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2043352665}
@@ -576,6 +576,16 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5818755179972250419, guid: e724896b1d8304365806710abbaff55f,
+        type: 3}
+      propertyPath: drawGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5818755179972250419, guid: e724896b1d8304365806710abbaff55f,
+        type: 3}
+      propertyPath: rotationDamping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3623661203436047335, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: damping
@@ -614,17 +624,17 @@ PrefabInstance:
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
@@ -634,7 +644,7 @@ PrefabInstance:
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.95
+      value: 3.43
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
@@ -644,27 +654,27 @@ PrefabInstance:
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.70773286
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.5938583
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.24598415
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0.29315254
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
@@ -674,7 +684,7 @@ PrefabInstance:
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -45
       objectReference: {fileID: 0}
     - target: {fileID: 8904345421717902533, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
@@ -704,8 +714,9 @@ PrefabInstance:
     - target: {fileID: 8904345421717902542, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_Constraints
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3623661203436047335, guid: e724896b1d8304365806710abbaff55f, type: 3}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: e724896b1d8304365806710abbaff55f, type: 3}
