@@ -11,7 +11,7 @@ using UnityEngine;
 namespace Cappa.Core
 {
 
-    //[RequireComponent(Player)]
+    [RequireComponent(typeof(Rigidbody))]
     public class PhysicalObject : MonoBehaviour
     {
 
@@ -19,18 +19,18 @@ namespace Cappa.Core
         [SerializeField] Vector3 stabilizationAxis = Vector3.up;
 
         [SerializeField, Range(0f, 100f)] float rotationStiffness = 1f;
-        [SerializeField, Range(0f, 1f)] float rotationDamping = 1f;
+        [SerializeField, Range(1f, 100000f)] float rotationSmoothness = 1f;
 
         //[SerializeField] bool useLocalAxis = false;
 
 
         [Header("\n\n\nFloat Settings\n")]
 
-        [SerializeField, Range(0, 100)] float floatHight = 1f;
+        [SerializeField, Range(0, 20f)] float floatHight = 1f;
 
-        [SerializeField, Range(0, 100)] float stiffness = 3f;
+        [SerializeField, Range(0, 100f)] float stiffness = 3f;
 
-        [SerializeField, Range(0, 100)] float damping = 0f;
+        [SerializeField, Range(0, 2000f)] float damping = 0f;
 
 
 
@@ -42,8 +42,6 @@ namespace Cappa.Core
         [SerializeField, Range(0, 2), Tooltip("If modified:\nBehavoiur may break\nor become unstable.")]
         float rotationBaseMultiplier = 1f;
 
-
-        Vector3 TargetLookDirection;
 
         Rigidbody body;
         Vector3 Velocity => body.velocity;
@@ -66,11 +64,11 @@ namespace Cappa.Core
 
                 // Torque not affected by other torques and forces
                 Vector3 unaf_trq = r_angle * RotationAxis;
-                Vector3 affection = rotationDamping * -mod_ang_vel;
+                Vector3 affection = 1/rotationSmoothness * -mod_ang_vel;
 
                 Vector3 trq = 100 * rotationStiffness * unaf_trq - affection;
 
-                Vector3 dmpt_trq = trq - rotationDamping * body.mass * body.angularVelocity;
+                Vector3 dmpt_trq = trq - 1/rotationSmoothness * body.mass * body.angularVelocity;
                 return dmpt_trq;
             }
         }
@@ -78,27 +76,22 @@ namespace Cappa.Core
         float angle;
 
 
-
-        void Start()
+        void Awake()
         {
             body = GetComponent<Rigidbody>();
             Raycast();
-            TargetLookDirection = Vector3.forward;
-            TargetLookDirection.y = 0f;
         }
 
         void Update()
         {
-            CalculateForce();
-            CalculateRotation();
             DrawGizmos();
-            Raycast();
         }
 
         void FixedUpdate()
         {
             Hover();
             Stabilize();
+            Raycast();
         }
 
 
@@ -113,7 +106,7 @@ namespace Cappa.Core
         void CalculateForce()
         {
 
-            if (!Grounded) { Force = Vector2.zero; return; }
+            if (!Grounded) { Force = Vector3.up * transform.localScale.y * -Physics.gravity.y; return; }
 
 
             // Spring tension length
@@ -139,7 +132,7 @@ namespace Cappa.Core
 
 
             // The absolute value of force which would keep {this} floating;
-            var spring_force = (dx * stiffness) - (rv * damping);
+            var spring_force = (dx * stiffness * body.mass) - (rv * damping);
 
             // Transition to the actual force;
             Force = spring_force * direction - body.mass * Physics.gravity;
@@ -160,9 +153,15 @@ namespace Cappa.Core
 
 
 
-        void Hover() => body.AddForce(Force);
+        void Hover() {
+            CalculateForce();
+            body.AddForce(Force);
+        }
 
-        void Stabilize() => body.AddTorque(Torque); // - Floor Rotation speed multiplied by damping;
+        void Stabilize() {
+            CalculateRotation();
+            body.AddTorque(Torque); // - Floor Rotation speed multiplied by damping;
+        }
 
 
 
