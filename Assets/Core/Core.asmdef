@@ -1,3 +1,14 @@
 {
-	"name": "Core.Essentials"
+    "name": "Core.Essentials",
+    "rootNamespace": "Cappa",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

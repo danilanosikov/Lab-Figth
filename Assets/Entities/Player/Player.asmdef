@@ -1,6 +1,6 @@
 {
     "name": "Entity.Player",
-    "rootNamespace": "",
+    "rootNamespace": "Cappa.Player",
     "references": [
         "GUID:a43c53ac4d1504c6a9dee0d7783da00a",
         "GUID:75469ad4d38634e559750d17036d5f7c"

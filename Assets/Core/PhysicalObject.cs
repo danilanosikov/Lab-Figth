@@ -1,11 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using PlasticPipe.PlasticProtocol.Messages;
 using UnityEngine;
-
-
-
-//targetHight = floatHight + Vector3.Dot(transform.TransformDirection(Down), Centre - transform.position)
 
 
 namespace Cappa.Core
