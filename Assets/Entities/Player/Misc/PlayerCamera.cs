@@ -7,12 +7,17 @@ namespace Cappa.Player
     public class PlayerCamera : MonoBehaviour
     {
 
-        [Header("General:\n\n")]
+        [Header("Movement:\n")]
 
         [Tooltip("The speed with which the camera will move towards its tarrget, if subject is further than comfortRadius")]
-        [SerializeField] float swiftness = 1f;
+        [SerializeField, Range(0f, 20f)] float swiftness = 1f;
         [Tooltip("The radius,\nin which camera wouldn't be triggered\nfor linear movement.\n.")]
-        [SerializeField, Min(0)] float comfortRadius = 6f;
+        [SerializeField, Range(0, 100)] float comfortRadius = 6f;
+
+
+        [Header("\n\nRotation:\n")]
+        [SerializeField, Range(-20f, 20f)] float horizontalOffset = 0f;
+        [SerializeField, Range(0f, 20f)] float RotationSwiftness = 2f;
 
         float cameraHight = 3f;
 
@@ -25,6 +30,7 @@ namespace Cappa.Player
             set => transform.position = value;
 
         }
+        Quaternion Rotation => transform.rotation;
 
         // A step to take towards target each update, when it is out of comfort radius;
         float Step => 0.3f * Mathf.Sqrt(Mathf.Abs(Distance.magnitude));
@@ -53,16 +59,30 @@ namespace Cappa.Player
         }
 
 
+        void FixedUpdate()
+        {
+            Rotate();
+        }
+
+
 
 
         /* Logic */
 
 
-
-
         void Move()
         {
             if (Mathf.Abs(Distance.magnitude) > comfortRadius) Position += swiftness * Time.deltaTime * Step * Distance.normalized;
+        }
+
+        void Rotate()
+        {
+            var frwrd = Quaternion.LookRotation(transform.forward, transform.up);
+            var trgt = Quaternion.LookRotation(Distance.normalized, transform.up);
+
+            var dr = Quaternion.RotateTowards(frwrd, trgt, 1f);
+
+            transform.localRotation = dr;
         }
 
     }
