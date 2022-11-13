@@ -77,12 +77,26 @@ namespace Cappa.Player
 
         void Rotate()
         {
+            if(TargetInFOV()) return;
+
             var frwrd = Quaternion.LookRotation(transform.forward, transform.up);
             var trgt = Quaternion.LookRotation(Distance.normalized, transform.up);
 
             var dr = Quaternion.RotateTowards(frwrd, trgt, 1f);
 
             transform.localRotation = dr;
+        }
+
+        bool TargetInFOV() {
+            var fov = gameObject.GetComponent<Camera>().fieldOfView;
+
+            var f = transform.forward; f.y = 0;
+            var d = Distance.normalized; d.y = 0;
+
+            var angle = Vector3.Angle(f, d);
+
+
+            return !(angle > fov / 2);
         }
 
     }
