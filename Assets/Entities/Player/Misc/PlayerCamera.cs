@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using System.Drawing;
 
 namespace Cappa.Player
 {
@@ -90,32 +89,29 @@ namespace Cappa.Player
         /* Movement Implementation */
 
         void Follow() => Position += Time.deltaTime * StepToTarget;
+        
 
 
 
-        /* Rotation Implementation */
 
-        Quaternion CalculateRotation(Vector3 distance) => Quaternion.RotateTowards(Quaternion.LookRotation(transform.forward, transform.up), Quaternion.LookRotation(distance.normalized, transform.up), 1f);
-        bool Rotate(Vector3 point)
+
+        void RotateToTarget()
         {
-            var dif = point - Position;
-            transform.localRotation = CalculateRotation(dif);
-            return Vector3.Dot(transform.forward, dif.normalized) > 0.98f; // true on small rotation
-        } 
-        void LookAtTarget()
-        {
-            var pos = Target.transform.position; pos.y -= cameraHight;
-            Rotate(pos);
+            var cr_rot = transform.rotation;
+
+            var tgt_rot = Quaternion.LookRotation(WayToTarget, Vector3.up);
+
+            var rot = Quaternion.RotateTowards(cr_rot, tgt_rot, 1f);
+
+            transform.rotation = rot;
         }
 
-
-
+        
 
         void Behold()
         {
             if (TargetInFocus) return;
-            else if (TargetInDeadZone) LookAtTarget();
-            else LookAtTarget();
+            RotateToTarget();
         }
 
 
