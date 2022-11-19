@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1079,6 +1079,11 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7217829667257547103, guid: e724896b1d8304365806710abbaff55f,
+        type: 3}
+      propertyPath: stabilizationAxis.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7217829667709333402, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
       propertyPath: m_RootOrder
@@ -1141,8 +1146,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7217829667982750801, guid: e724896b1d8304365806710abbaff55f,
         type: 3}
+      propertyPath: swiftness
+      value: 11.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7217829667982750801, guid: e724896b1d8304365806710abbaff55f,
+        type: 3}
       propertyPath: comfortRadius
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7217829667982750801, guid: e724896b1d8304365806710abbaff55f,
+        type: 3}
+      propertyPath: RotationSwiftness
+      value: 1.43
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

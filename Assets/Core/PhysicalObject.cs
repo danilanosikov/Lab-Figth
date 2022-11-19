@@ -11,7 +11,6 @@ namespace Cappa.Core
     {
 
         [Header("Stabilizer Settings\n")]
-        [SerializeField] Vector3 stabilizationAxis = Vector3.up;
 
         [SerializeField, Range(0f, 100f)] float rotationStiffness = 1f;
         [SerializeField, Range(1f, 100000f)] float rotationSmoothness = 1f;
@@ -135,7 +134,7 @@ namespace Cappa.Core
 
         void CalculateRotation()
         {
-            var trgt = Quaternion.Euler(stabilizationAxis);
+            var trgt = Quaternion.identity;
 
             // Shortest rotation between two quaternions;
             Quaternion rot = Quaternion.Slerp(transform.rotation, trgt, rotationBaseMultiplier * 0.000001f);

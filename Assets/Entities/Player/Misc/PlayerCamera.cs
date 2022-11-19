@@ -7,62 +7,98 @@ namespace Cappa.Player
     public class PlayerCamera : MonoBehaviour
     {
 
-        [Header("General:\n\n")]
+        /* Field Section */
 
-        [Tooltip("The speed with which the camera will move towards its tarrget, if subject is further than comfortRadius")]
-        [SerializeField] float swiftness = 1f;
+        [Header("Movement:\n")]
+
+        [Tooltip("The speed with which the camera will move towards its target, if subject is further than comfortRadius")]
+        [SerializeField, Range(0f, 20f)] float swiftness = 1f;
         [Tooltip("The radius,\nin which camera wouldn't be triggered\nfor linear movement.\n.")]
-        [SerializeField, Min(0)] float comfortRadius = 6f;
+        [SerializeField, Range(0, 100)] float comfortRadius = 6f;
 
-        float cameraHight = 3f;
 
-        GameObject Target => transform.parent.gameObject.GetComponentInChildren<PlayerController>().gameObject;
+        [Header("\n\nRotation:\n")]
+        [SerializeField, Range(0f, 20f)] float deadZone = 5f;
 
+
+
+
+
+        /* Camera-Related Properties */
+
+
+
+        float cameraHeight = 3f;
+        float FOV => gameObject.GetComponent<Camera>().fieldOfView;
         Vector3 Position
         {
-
             get => transform.position;
             set => transform.position = value;
-
         }
 
-        // A step to take towards target each update, when it is out of comfort radius;
-        float Step => 0.3f * Mathf.Sqrt(Mathf.Abs(Distance.magnitude));
 
-        Vector3 Distance {
+
+        /* Target-Related Properties. */
+
+
+        GameObject Target => transform.parent.gameObject.GetComponentInChildren<PlayerController>().gameObject;
+        Vector3 WayToTarget {
             get
             {
-
                 var t_pos = Target.transform.position;
-                t_pos.y -= cameraHight;
+                t_pos.y -= cameraHeight;
                 return t_pos - Position;
             }
         }
+        bool TargetOutOfRange => Mathf.Abs(WayToTarget.magnitude) > comfortRadius;
+        Vector3 Step => 0.3f * swiftness * Mathf.Sqrt(Mathf.Abs(WayToTarget.magnitude)) * WayToTarget.normalized;
+        float AngleToTarget {
 
+            get {
+                var f = transform.forward; f.y = 0;
+                var d = WayToTarget.normalized; d.y = 0;
 
-        void Start()
-        {
-            cameraHight = Target.transform.position.y - Position.y;
+                return Vector3.Angle(f, d);
+            }
+
         }
+        bool TargetInFOV => !(AngleToTarget > (FOV / 2));
+        bool TargetInFocus => !(AngleToTarget > (FOV / 2) - deadZone);
+        bool TargetInDeadZone => !TargetInFocus && TargetInFOV;
+        bool TargetInCentre => Mathf.Abs(AngleToTarget) <= deadZone;
+        Vector3 StepToTarget => TargetOutOfRange ? Step : Vector3.zero;
 
-        /* Unity Default Functions */
+
+
+
+        /* Unity's Default Functions */
+
+        void Start() => cameraHeight = Target.transform.position.y - Position.y;
 
         void Update()
         {
-            Move();
+            Follow();
+            RotateToTarget();
         }
 
 
+        /* Movement Implementation */
 
+        void Follow() => Position += Time.deltaTime * StepToTarget;
+        
+        
 
-        /* Logic */
-
-
-
-
-        void Move()
+        void RotateToTarget()
         {
-            if (Mathf.Abs(Distance.magnitude) > comfortRadius) Position += swiftness * Time.deltaTime * Step * Distance.normalized;
+            var tgt_dir = WayToTarget.normalized;
+            
+            var cr_rot = transform.rotation;
+
+            var tgt_rot = Quaternion.LookRotation(tgt_dir, Vector3.up);
+
+            var rot = Quaternion.RotateTowards(cr_rot, tgt_rot, 1f);
+
+            transform.rotation = rot;
         }
 
     }
