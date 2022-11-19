@@ -11,15 +11,13 @@ namespace Cappa.Player
 
         [Header("Movement:\n")]
 
-        [Tooltip("The speed with which the camera will move towards its tarrget, if subject is further than comfortRadius")]
+        [Tooltip("The speed with which the camera will move towards its target, if subject is further than comfortRadius")]
         [SerializeField, Range(0f, 20f)] float swiftness = 1f;
         [Tooltip("The radius,\nin which camera wouldn't be triggered\nfor linear movement.\n.")]
         [SerializeField, Range(0, 100)] float comfortRadius = 6f;
 
 
         [Header("\n\nRotation:\n")]
-        [SerializeField, Range(-20f, 20f)] float horizontalOffset = 0f;
-        [SerializeField, Range(0f, 20f)] float rotationSwiftness = 2f;
         [SerializeField, Range(0f, 20f)] float deadZone = 5f;
 
 
@@ -30,16 +28,13 @@ namespace Cappa.Player
 
 
 
-        float cameraHight = 3f;
+        float cameraHeight = 3f;
         float FOV => gameObject.GetComponent<Camera>().fieldOfView;
         Vector3 Position
         {
             get => transform.position;
             set => transform.position = value;
         }
-
-
-
 
 
 
@@ -51,7 +46,7 @@ namespace Cappa.Player
             get
             {
                 var t_pos = Target.transform.position;
-                t_pos.y -= cameraHight;
+                t_pos.y -= cameraHeight;
                 return t_pos - Position;
             }
         }
@@ -70,7 +65,7 @@ namespace Cappa.Player
         bool TargetInFOV => !(AngleToTarget > (FOV / 2));
         bool TargetInFocus => !(AngleToTarget > (FOV / 2) - deadZone);
         bool TargetInDeadZone => !TargetInFocus && TargetInFOV;
-        bool TargetInCentre =>Mathf.Abs(AngleToTarget) <= deadZone;
+        bool TargetInCentre => Mathf.Abs(AngleToTarget) <= deadZone;
         Vector3 StepToTarget => TargetOutOfRange ? Step : Vector3.zero;
 
 
@@ -78,42 +73,33 @@ namespace Cappa.Player
 
         /* Unity's Default Functions */
 
-        void Start()
+        void Start() => cameraHeight = Target.transform.position.y - Position.y;
+
+        void Update()
         {
-            cameraHight = Target.transform.position.y - Position.y;
+            Follow();
+            RotateToTarget();
         }
-        void Update() => Follow();
-        void FixedUpdate() => Behold();
 
 
         /* Movement Implementation */
 
         void Follow() => Position += Time.deltaTime * StepToTarget;
         
-
-
-
-
+        
 
         void RotateToTarget()
         {
+            var tgt_dir = WayToTarget.normalized;
+            
             var cr_rot = transform.rotation;
 
-            var tgt_rot = Quaternion.LookRotation(WayToTarget, Vector3.up);
+            var tgt_rot = Quaternion.LookRotation(tgt_dir, Vector3.up);
 
             var rot = Quaternion.RotateTowards(cr_rot, tgt_rot, 1f);
 
             transform.rotation = rot;
         }
-
-        
-
-        void Behold()
-        {
-            if (TargetInFocus) return;
-            RotateToTarget();
-        }
-
 
     }
 }
