@@ -19,6 +19,7 @@ namespace Cappa.Player
 
         [Header("\n\nRotation:\n")]
         [SerializeField, Range(0f, 20f)] float deadZone = 5f;
+        [SerializeField, Range(0f, 20f)] float rotationSwiftness = 5f;
 
 
 
@@ -96,7 +97,7 @@ namespace Cappa.Player
 
             var tgt_rot = Quaternion.LookRotation(tgt_dir, Vector3.up);
 
-            var rot = Quaternion.RotateTowards(cr_rot, tgt_rot, 1f);
+            var rot = Quaternion.RotateTowards(cr_rot, tgt_rot, rotationSwiftness);
 
             transform.rotation = rot;
         }
