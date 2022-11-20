@@ -39,11 +39,7 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
-
-# Meta
-*.pidb.meta
-*.pdb.meta
-*.mdb.meta
+**/*.meta
 
 # Crashes
 sysinfo.txt
@@ -58,10 +54,3 @@ crashlytics-build.properties
 # Packages
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 *.unitypackage
-
-# Temporary
-/[Aa]ssets/[Ss]treamingAssets/aa.meta
-/[Aa]ssets/[Ss]treamingAssets/aa/*
-Assets/Tests/Tests.asmdef
-Assets/Tests.meta
-Assets/Tests/Tests.asmdef.meta
