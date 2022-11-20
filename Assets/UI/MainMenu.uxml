@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Menu.uss?fileID=7433441132597879392&amp;guid=fb622ff14a08a451d848092e54cfec6c&amp;type=3#Menu" />
+    <ui:VisualElement name="Screen" style="flex-grow: 1;">
+        <ui:VisualElement name="Menu" style="justify-content: flex-end; flex-basis: auto; align-items: stretch; flex-direction: column-reverse; flex-wrap: nowrap; flex-grow: 1; flex-shrink: 1; height: auto; width: 33%; right: -66%; position: relative; padding-top: 35px; padding-bottom: 35px; padding-right: 25px; padding-left: 25px; margin-left: 12px; margin-right: 12px; margin-top: 18px; margin-bottom: 18px;">
+            <ui:GroupBox name="Buttons" style="flex-grow: 1; flex-shrink: 1; justify-content: space-between; align-items: flex-end; flex-direction: column; flex-wrap: nowrap; flex-basis: 100px; top: auto; width: auto;">
+                <ui:Button text="Client" display-tooltip-when-elided="true" name="Client" class="button" />
+                <ui:Button text="Host" display-tooltip-when-elided="true" name="Host" class="button" />
+            </ui:GroupBox>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

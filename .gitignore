@@ -7,6 +7,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+/[Aa]ssets/[Ii]mported/[Pp]ackages
 
 # Can get excessive in size.
 /[Mm]emoryCaptures/
@@ -15,9 +16,12 @@
 # Jetbrains Rider
 /[Aa]ssets/Plugins/Editor/JetBrains*
 
-# Visual Studio
+# IDE
 .vs/
 .vsconfig
+
+.idea/*
+
 *.sln
 
 # Gradle cache directory
@@ -39,11 +43,7 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
-
-# Meta
-*.pidb.meta
-*.pdb.meta
-*.mdb.meta
+**/*.meta
 
 # Crashes
 sysinfo.txt
@@ -58,10 +58,3 @@ crashlytics-build.properties
 # Packages
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 *.unitypackage
-
-# Temporary
-/[Aa]ssets/[Ss]treamingAssets/aa.meta
-/[Aa]ssets/[Ss]treamingAssets/aa/*
-Assets/Tests/Tests.asmdef
-Assets/Tests.meta
-Assets/Tests/Tests.asmdef.meta
