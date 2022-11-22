@@ -21,7 +21,8 @@ namespace Cappa.Player
 
 
 
-
+        public float Speed => Mathf.Abs(body.velocity.magnitude);
+        public float Limit => limit;
 
 
 
@@ -40,8 +41,6 @@ namespace Cappa.Player
 
         void Move()
         {
-            Debug.DrawRay(transform.position, forward * 10, Color.magenta);
-
             if (input == Vector2.zero) Decelerate();
             else Accelerate();
         }

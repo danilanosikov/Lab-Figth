@@ -48,11 +48,28 @@ namespace Cappa.Player
             {
                 var t_pos = Target.transform.position;
                 t_pos.y -= cameraHeight;
-                return t_pos - Position;
+                var way = t_pos - Position;
+                return way;
+            }
+        }
+        float Discomfort {
+            // Difference in distnce between target and nearest to it cameras circle point;
+            get {
+
+                var way = WayToTarget;
+                var radius = way.normalized * comfortRadius;
+
+                var dif = (way - radius).magnitude;
+
+                var amount = Mathf.Abs(dif);
+
+
+                var pw = Mathf.Pow(1.14f, amount);
+                return pw;
             }
         }
         bool TargetOutOfRange => Mathf.Abs(WayToTarget.magnitude) > comfortRadius;
-        Vector3 Step => 0.3f * swiftness * Mathf.Sqrt(Mathf.Abs(WayToTarget.magnitude)) * WayToTarget.normalized;
+        Vector3 Step => 0.3f * swiftness * Discomfort * WayToTarget.normalized;
         float AngleToTarget {
 
             get {
