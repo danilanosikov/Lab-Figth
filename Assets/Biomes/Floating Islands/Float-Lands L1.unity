@@ -1006,6 +1006,13 @@ MonoBehaviour:
       target: {fileID: 1264009855}
       swiftness: 3.45
       minimalRadius: 9.82
+    rotor:
+      camera: {fileID: 841233024}
+      target: {fileID: 1264009855}
+      swiftness: 5.46
+      deadzone: 10
+      centrePercesion: 0
+      focusOffset: {x: 0, y: 0, z: 0}
 --- !u!135 &1264009858
 SphereCollider:
   m_ObjectHideFlags: 0

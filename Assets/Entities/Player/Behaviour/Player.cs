@@ -80,9 +80,11 @@ namespace Cappa.Player
     [Serializable]
     class Camera {
         [SerializeField] Follower follower;
+        [SerializeField] Rotor rotor;
 
         public void Behave() {
             follower.Follow();
+            rotor.Rotate();
         }
 
 
@@ -155,6 +157,108 @@ namespace Cappa.Player
                 camera.position += Time.deltaTime * Velocity;
             }
         }
+
+        [Serializable]
+        internal class Rotor
+        {
+            [SerializeField] Transform camera, target;
+            [SerializeField, Range(0f, 15f)] float swiftness = 3f, deadzone = 10f, centrePercesion = 0f;
+
+
+            [SerializeField] Vector3 focusOffset = Vector3.zero;
+
+
+
+
+
+
+
+            UnityEngine.Camera Camera
+            {
+                get
+                {
+                    return camera.gameObject.GetComponent<UnityEngine.Camera>();
+                }
+            }
+
+            Vector3 Direction
+            {
+                get
+                {
+                    var target_position = target.position;
+
+                    target_position += focusOffset;
+
+                    var distance = target_position - camera.position;
+
+                    return distance.normalized;
+                }
+            }
+
+            float Discomfort
+            {
+                // Difference in distnce between target and nearest to it cameras circle point;
+                get
+                {
+
+                    var distance_to_nearest_border = Mathf.Abs(Mathf.Abs(Angle) - centrePercesion);
+
+                    var inconvinience_strength = Mathf.Pow(2.72f, Mathf.Sqrt(distance_to_nearest_border));
+
+                    return inconvinience_strength;
+                }
+            }
+
+            float AngularVelocity
+            {
+                get
+                {
+                    return Discomfort * swiftness;
+                }
+            }
+
+            float Angle
+            {
+                get
+                {
+                    var f = camera.transform.forward; f.y = 0;
+                    var d = Direction; d.y = 0;
+                    return Vector3.Angle(f, d);
+                }
+            }
+
+            float FOV
+            {
+                get
+                {
+                    return Camera.fieldOfView;
+                }
+            }
+
+            bool OnScreen => !(Angle > (FOV / 2));
+
+            bool InFocus => !(Angle > (FOV / 2) - deadzone);
+
+            bool NearScreenEdge => !InFocus && OnScreen;
+
+            bool InCentre => Mathf.Abs(Angle) <= centrePercesion;
+
+
+            void RotateToTarget()
+            {
+                var desired_rotation = Quaternion.LookRotation(Direction, Vector3.up);
+                var rot = Quaternion.RotateTowards(camera.rotation, desired_rotation, AngularVelocity);
+                camera.rotation = rot;
+            }
+
+
+            public void Rotate()
+            {
+                RotateToTarget();
+            }
+
+        }
+
     }
 
 }
