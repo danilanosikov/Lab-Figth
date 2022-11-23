@@ -74,20 +74,27 @@ namespace Cappa.Player
     [Serializable]
     class Camera
     {
-
-        // Component owner.
-        [SerializeField] Transform subject;
-
-        // Unity Camera.
-        UnityEngine.Camera Component => subject.gameObject.GetComponent<UnityEngine.Camera>();
-
-        // Forward Direction with no Y affection.
-        Vector3 Forward => new(Component.transform.forward.x, 0, Component.transform.forward.z);
-
-        // Right Direction with no Y affection.
-        Vector3 Right => new(Component.transform.right.x, 0, Component.transform.right.z);
+        [SerializeField] Object camera;
 
         public void Behave() => throw new NotImplementedException();
+
+        [Serializable] internal class Object {
+            // Component owner.
+            [SerializeField] Transform subject;
+
+            // Unity Camera.
+            UnityEngine.Camera camera => subject.gameObject.GetComponent<UnityEngine.Camera>();
+
+            Transform Transform => camera.transform;
+            Vector3 Position => Transform.position;
+            Quaternion Rotation => Transform.rotation;
+
+            // Forward Direction with no Y affection.
+            Vector3 Forward => new(Transform.forward.x, 0, Transform.forward.z);
+
+            // Right Direction with no Y affection.
+            Vector3 Right => new(Transform.right.x, 0, Transform.right.z);
+        }
     }
 
 }
