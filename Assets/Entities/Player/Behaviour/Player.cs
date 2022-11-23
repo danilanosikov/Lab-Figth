@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cappa.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +10,7 @@ namespace Cappa.Player
     public class Player : MonoBehaviour
     {
         [SerializeField] Movement movement;
+        [SerializeField] Camera camera;
 
         public Vector2 Input { get; private set; }
 
@@ -18,11 +18,16 @@ namespace Cappa.Player
         void Start()
         {
             InitializeMovement();
+            InitializeCamera();
         }
 
         void FixedUpdate()
         {
             movement.Move();
+        }
+        void Update()
+        {
+            camera.Behave();
         }
 
 
@@ -33,6 +38,9 @@ namespace Cappa.Player
         void InitializeMovement() {
             var player = this;
             movement = new(ref player, ref movement.subject, movement.swiftness);
+        }
+        void InitializeCamera() {
+
         }
     }
 
@@ -69,31 +77,83 @@ namespace Cappa.Player
 
 
 
-
-
     [Serializable]
-    class Camera
-    {
-        [SerializeField] Object camera;
+    class Camera {
+        [SerializeField] Follower follower;
 
-        public void Behave() => throw new NotImplementedException();
+        public void Behave() {
+            follower.Follow();
+        }
 
-        [Serializable] internal class Object {
-            // Component owner.
-            [SerializeField] Transform subject;
 
-            // Unity Camera.
-            UnityEngine.Camera camera => subject.gameObject.GetComponent<UnityEngine.Camera>();
 
-            Transform Transform => camera.transform;
-            Vector3 Position => Transform.position;
-            Quaternion Rotation => Transform.rotation;
 
-            // Forward Direction with no Y affection.
-            Vector3 Forward => new(Transform.forward.x, 0, Transform.forward.z);
+        [Serializable]
+        internal class Follower
+        {
+            [SerializeField] Transform camera, target;
+            [SerializeField, Range(0f, 6f)] float swiftness = 1f;
+            [SerializeField, Range(0f, 20f)] float minimalRadius = 6f;
 
-            // Right Direction with no Y affection.
-            Vector3 Right => new(Transform.right.x, 0, Transform.right.z);
+            float HightOffset
+            {
+                get
+                {
+                    var difference = target.position.y - camera.position.y;
+                    var offset = -difference;
+                    return offset;
+                }
+            }
+
+            Vector3 Distance
+            {
+                get
+                {
+                    var target_position = target.position;
+
+                    target_position.y += HightOffset;
+
+                    var distance = target_position - camera.position;
+
+                    return distance;
+                }
+            }
+            bool OutOfReach
+            {
+                get => Mathf.Abs(Distance.magnitude) > minimalRadius;
+            }
+            float Discomfort
+            {
+                // Difference in distnce between target and nearest to it cameras circle point;
+                get
+                {
+
+                    var distance_to_nearest_border = Mathf.Abs(Mathf.Abs(Distance.magnitude) - minimalRadius);
+
+                    var inconvinience_strength = Mathf.Pow(2.72f, Mathf.Sqrt(distance_to_nearest_border));
+
+                    return inconvinience_strength;
+                }
+            }
+
+            Vector3 Velocity
+            {
+                get
+                {
+                    var way = Distance.normalized;
+
+                    var strength = swiftness * 0.3f * Discomfort;
+
+                    var step = strength * way;
+
+                    return OutOfReach ? step : Vector3.zero;
+                }
+            }
+
+            public void Follow()
+            {
+                camera.position += Time.deltaTime * Velocity;
+            }
         }
     }
 

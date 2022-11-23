@@ -760,12 +760,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 841233023}
   m_LocalRotation: {x: 0.08559079, y: -0, z: -0, w: 0.9963304}
-  m_LocalPosition: {x: 0, y: 2.4700003, z: -10.32}
+  m_LocalPosition: {x: 0, y: 5.4700003, z: -10.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1264009855}
-  m_RootOrder: -1
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 9.82, y: 0, z: 0}
 --- !u!114 &841233025
 MonoBehaviour:
@@ -980,11 +980,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 841233024}
   - {fileID: 326124990}
   - {fileID: 2088071560}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1264009856
 MonoBehaviour:
@@ -1001,6 +1000,12 @@ MonoBehaviour:
   movement:
     subject: {fileID: 1264009855}
     swiftness: 30
+  camera:
+    follower:
+      camera: {fileID: 841233024}
+      target: {fileID: 1264009855}
+      swiftness: 3.45
+      minimalRadius: 9.82
 --- !u!135 &1264009858
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1197,7 +1202,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2043352664
 GameObject:
