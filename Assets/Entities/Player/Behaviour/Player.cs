@@ -17,10 +17,34 @@ namespace Cappa.Player
         public Vector2 Input { get; private set; }
         public Vector3 RelativeDirection {
             get {
+                var up = camera.transfrom.up; up.y = 0; up.Normalize();
                 var forward = camera.transfrom.forward; forward.y = 0;
-                var right = camera.transfrom.right; right.y = 0;
+                var right = camera.transfrom.right; right.y = 0; right.Normalize();
 
-                return Input.y * forward + Input.x * right;
+                //if (Input.y > 0 && ) {
+
+                //}
+
+                Vector3 vertical;
+
+                if (Mathf.Abs(Input.y * forward.magnitude) > 0.3f) {
+                    forward.Normalize();
+                    vertical = Input.y * forward;
+                }
+                else
+                {
+                    forward.Normalize();
+                    if (Input.y > 0) vertical = Input.y * up;
+                    else vertical = Vector3.zero;
+                }
+
+
+
+                var horizontal = Input.x * right;
+
+                var direction = vertical + horizontal;
+
+                return direction;
             }
         }
 
