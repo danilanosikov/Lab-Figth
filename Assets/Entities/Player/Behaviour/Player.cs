@@ -26,13 +26,13 @@ namespace Cappa.Player
         }
 
 
-
         void OnMove(InputValue value) => Input = value.Get<Vector2>();
 
         /* Initialization */
 
         void InitializeMovement() {
-            movement = new(this, movement.subject, movement.swiftness);
+            var player = this;
+            movement = new(ref player, ref movement.subject, movement.swiftness);
         }
     }
 
@@ -59,13 +59,16 @@ namespace Cappa.Player
 
         public void Move() => Body.SimpleMove(swiftness * Direction);
 
-        public Movement(Player player, Transform subject, float swiftness = 5f) {
+        public Movement(ref Player player, ref Transform subject, float swiftness = 5f) {
             this.subject = subject;
             this.player = player;
             this.swiftness = swiftness;
         }
 
     }
+
+
+
 
 
     [Serializable]
