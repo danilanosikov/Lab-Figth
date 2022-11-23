@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 namespace Cappa.Core
@@ -9,162 +11,192 @@ namespace Cappa.Core
     [RequireComponent(typeof(Rigidbody))]
     public class PhysicalObject : MonoBehaviour
     {
+        [SerializeField] Transform subject;
+        [SerializeField] Hoverer hoverer;
+        [SerializeField] RotationStabilizer rotor;
 
-        [Header("Stabilizer Settings\n")]
+        void Start()
+        {
+            InitializeHoverer();
+        }
 
-        [SerializeField, Range(0f, 100f)] float rotationStiffness = 1f;
-        [SerializeField, Range(1f, 100000f)] float rotationSmoothness = 1f;
-
-        //[SerializeField] bool useLocalAxis = false;
-
-
-        [Header("\n\n\nFloat Settings\n")]
-
-        [SerializeField, Range(0, 20f)] float floatHight = 1f;
-
-        [SerializeField, Range(0, 100f)] float stiffness = 3f;
-
-        [SerializeField, Range(0, 2000f)] float damping = 0f;
+        void FixedUpdate()
+        {
+            hoverer.Behave();
+        }
 
 
+        /* Initialization */
+
+        void InitializeHoverer() {
+            hoverer = new(subject, hoverer.height, hoverer.stiffness, hoverer.damping);
+        }
+        void InitializeRotor() {
+            rotor = new(subject, rotor.stiffness, rotor.smoothness);
+        }
+
+    }
 
 
-        [Header("\n\n\nMiscellenious\n")]
-
-        [SerializeField] bool drawGizmos = false;
-
-        [SerializeField, Range(0, 2), Tooltip("If modified:\nBehavoiur may break\nor become unstable.")]
-        float rotationBaseMultiplier = 1f;
 
 
-        Rigidbody body;
-        Vector3 Velocity => body.velocity;
-        Vector3 Centre => body.worldCenterOfMass;
-        Vector3 Down => -transform.up;
+    [Serializable]
+    class Hoverer
+    {
+        [NonSerialized] public Transform subject;
 
-        RaycastHit Ground { get; set; }
-        Vector3 GroundVelocity { get; set; }
-        bool Grounded { get; set; }
+        [SerializeField, Range(0, 20f)] public float height = 1f;
+        [SerializeField, Range(0, 100f)] public float stiffness = 3f;
+        [SerializeField, Range(0, 2000f)] public float damping = 0f;
 
-        Vector3 Force { get; set; }
+        Transform Transform => subject.transform;
+        Rigidbody Body => subject.gameObject.GetComponent<Rigidbody>();
+
+        Vector3 Down => -Transform.up;
+
+        RaycastHit Ground
+        {
+            get
+            {
+                Physics.Raycast(Transform.position, Down, out var hit, height);
+                return hit;
+            }
+        }
+        Vector3 GroundVelocity
+        {
+            get
+            {
+                var body = Ground.rigidbody;
+                return body != null ? body.velocity : Vector3.zero;
+            }
+        }
+        bool Grounded => Physics.Raycast(Transform.position, Down, out var hit, height);
+
+        Vector3 Force
+        {
+            get
+            {
+                if (!Grounded) return -Physics.gravity.y * Transform.localScale.y * Vector3.up;
+                else
+                {
+                    // Spring tension length
+                    var dx = Ground.distance - height;
+
+
+                    // Down Ray Target Coordinates in the World Space
+                    var direction = Transform.TransformDirection(Down);
+
+
+                    // Velocity component in terms of ray direction, usually local downward y axis is the ray direction;
+                    // (direction component of velocity)
+                    // Converted to the "ray axis" not to make the machine compute muiltiple axis afterwards,
+                    // but rather one, which can be represented as a single dimention variable (float);
+                    float dcv = Vector3.Dot(direction, Body.velocity);
+
+                    // Same but for the ground, {this} is standing on;
+                    float g_dcv = Vector3.Dot(direction, GroundVelocity);
+
+
+                    // Velocity relative to the ground
+                    float rv = dcv - g_dcv;
+
+
+                    // The absolute value of force which would keep {this} floating;
+                    var spring_force = (dx * stiffness * Body.mass) - (rv * damping);
+
+                    // Transition to the actual force;
+                    return spring_force * direction - Body.mass * Physics.gravity;
+                }
+            }
+        }
+
+        public Hoverer(Transform subject, float height = 1f, float stiffness = 3f, float damping = 1f) {
+            this.subject = subject;
+            this.height = height;
+            this.stiffness = stiffness;
+            this.damping = damping;
+        }
+
+        public void Behave() => Body.AddForce(Force);
+    }
+
+
+
+
+
+    [Serializable]
+    class RotationStabilizer
+    {
+        [NonSerialized] public Transform subject;
+
+        [SerializeField, Range(0f, 100f)] public float stiffness = 1f;
+        [SerializeField, Range(1f, 100f)] public float smoothness = 1f;
+
+        Transform Transform => subject.transform;
+        Rigidbody Body => subject.gameObject.GetComponent<Rigidbody>();
 
         Vector3 Torque
         {
             get
             {
-                Vector3 ang_vel = body.angularVelocity, mod_ang_vel = new(ang_vel.x, 0, ang_vel.z);
-                // Angle in radiants with appropriate direction;
-                float r_angle = -angle * Mathf.Deg2Rad;
+                var stiffness = this.stiffness;
+                var smoothness = 1 / (1000 * this.smoothness);
+                var angular_velocity = -Body.angularVelocity; angular_velocity.y = 0;
 
-                // Torque not affected by other torques and forces
-                Vector3 unaf_trq = r_angle * RotationAxis;
-                Vector3 affection = 1/rotationSmoothness * -mod_ang_vel;
+                // Non-dmped torque.
+                var trq = 100 * stiffness * Angle * Axis;
+                var damping = smoothness * (angular_velocity + Body.mass * Body.angularVelocity); // If wouldn't work change + to -;
 
-                Vector3 trq = 100 * rotationStiffness * unaf_trq - affection;
-
-                Vector3 dmpt_trq = trq - 1/rotationSmoothness * body.mass * body.angularVelocity;
-                return dmpt_trq;
+                // Damped torque
+                return trq -= damping;
             }
         }
-        Vector3 RotationAxis;
-        float angle;
 
-
-        void Awake()
+        // Stabilization rotation.
+        Quaternion Rotation
         {
-            body = GetComponent<Rigidbody>();
-            Raycast();
+            get
+            {
+                // Shortest rotation between two quaternions;
+                Quaternion rotation = Quaternion.Slerp(Transform.rotation, Quaternion.identity, 0.000001f);
+
+                //Disabling rotation by y axis, to calculate it saparately.
+                rotation.y = 0;
+
+                return rotation;
+            }
         }
 
-        void Update()
+        // Rotation axis.
+        Vector3 Axis
         {
-            DrawGizmos();
+            get
+            {
+                Rotation.ToAngleAxis(out var angle, out var axis);
+                return axis.normalized;
+            }
         }
 
-        void FixedUpdate()
+        // Rotation angle in radians.
+        float Angle
         {
-            Hover();
-            Stabilize();
-            Raycast();
+            get
+            {
+                Rotation.ToAngleAxis(out var angle, out var axis);
+                return -angle * Mathf.Deg2Rad;
+            }
         }
 
-
-
-        void Raycast()
+        public RotationStabilizer(Transform subject, float stiffness = 3f, float smoothness = 1f)
         {
-            Grounded = Physics.Raycast(Centre, Down, out var hit, floatHight);
-            Ground = hit; var body = Ground.rigidbody;
-            GroundVelocity = body != null ? body.velocity : Vector3.zero;
+            this.subject = subject;
+            this.stiffness = stiffness;
+            this.smoothness = smoothness;
         }
 
-        void CalculateForce()
-        {
+        // RotationStabilizer behaviour.
+        public void Behave() => Body.AddTorque(Torque); // - floor angular speed multiplied by damping;
 
-            if (!Grounded) { Force = Vector3.up * transform.localScale.y * -Physics.gravity.y; return; }
-
-
-            // Spring tension length
-            var dx = Ground.distance - floatHight;
-
-
-            // Down Ray Target Coordinates in the World Space
-            var direction = transform.TransformDirection(Down);
-
-
-            // Velocity component in terms of ray direction, usually local downward y axis is the ray direction;
-            // (direction component of velocity)
-            // Converted to the "ray axis" not to make the machine compute muiltiple axis afterwards,
-            // but rather one, which can be represented as a single dimention variable (float);
-            float dcv = Vector3.Dot(direction, body.velocity);
-
-            // Same but for the ground, {this} is standing on;
-            float g_dcv = Vector3.Dot(direction, GroundVelocity);
-
-
-            // Velocity relative to the ground
-            float rv = dcv - g_dcv;
-
-
-            // The absolute value of force which would keep {this} floating;
-            var spring_force = (dx * stiffness * body.mass) - (rv * damping);
-
-            // Transition to the actual force;
-            Force = spring_force * direction - body.mass * Physics.gravity;
-        }
-
-        void CalculateRotation()
-        {
-            var trgt = Quaternion.identity;
-
-            // Shortest rotation between two quaternions;
-            Quaternion rot = Quaternion.Slerp(transform.rotation, trgt, rotationBaseMultiplier * 0.000001f);
-            rot.y = 0; //Disabling rotation by y axis, to calculate it saparately.
-
-            // Spits an angle and the axis, around which rotation happens on what angle, in degrees.
-            rot.ToAngleAxis(out angle, out RotationAxis);
-            RotationAxis.Normalize();
-        }
-
-
-
-        void Hover() {
-            CalculateForce();
-            body.AddForce(Force);
-        }
-
-        void Stabilize() {
-            CalculateRotation();
-            body.AddTorque(Torque); // - Floor Rotation speed multiplied by damping;
-        }
-
-
-
-        void DrawGizmos()
-        {
-            if (!drawGizmos) return;
-            Debug.DrawRay(Centre, Down * floatHight, Color.blue);
-            Debug.DrawRay(Centre, Force, Color.yellow);
-            Debug.DrawRay(transform.position, RotationAxis.normalized, Color.magenta);
-        }
     }
+
 }
