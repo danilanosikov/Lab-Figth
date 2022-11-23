@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
+using UnityEngine.Windows;
 
 namespace Cappa.Player
 {
@@ -13,6 +15,14 @@ namespace Cappa.Player
         [SerializeField] Camera camera;
 
         public Vector2 Input { get; private set; }
+        public Vector3 RelativeDirection {
+            get {
+                var forward = camera.transfrom.forward; forward.y = 0;
+                var right = camera.transfrom.right; right.y = 0;
+
+                return Input.y * forward + Input.x * right;
+            }
+        }
 
 
         void Start()
@@ -31,7 +41,18 @@ namespace Cappa.Player
         }
 
 
+
+
+
+
+
+        /* Input */
+
         void OnMove(InputValue value) => Input = value.Get<Vector2>();
+
+
+
+
 
         /* Initialization */
 
@@ -51,7 +72,7 @@ namespace Cappa.Player
 
         Player player;
 
-        [SerializeField]  public Transform subject;
+        [SerializeField] public Transform subject;
         [SerializeField] public float swiftness = 5f;
 
         CharacterController Body => subject.gameObject.GetComponent<CharacterController>();
@@ -59,8 +80,7 @@ namespace Cappa.Player
         public Vector3 Direction {
 
             get {
-                var input = player.Input;
-                return new(input.x, 0, input.y);
+                return player.RelativeDirection;
             }
 
         }
@@ -79,8 +99,10 @@ namespace Cappa.Player
 
     [Serializable]
     class Camera {
-        [SerializeField] Follower follower;
-        [SerializeField] Rotor rotor;
+
+        [SerializeField] public Transform transfrom;
+        [SerializeField] public Follower follower;
+        [SerializeField] public Rotor rotor;
 
         public void Behave() {
             follower.Follow();
@@ -260,5 +282,4 @@ namespace Cappa.Player
         }
 
     }
-
 }

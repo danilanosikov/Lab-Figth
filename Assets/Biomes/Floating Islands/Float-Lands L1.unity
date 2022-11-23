@@ -1001,6 +1001,7 @@ MonoBehaviour:
     subject: {fileID: 1264009855}
     swiftness: 30
   camera:
+    transfrom: {fileID: 841233024}
     follower:
       camera: {fileID: 841233024}
       target: {fileID: 1264009855}
