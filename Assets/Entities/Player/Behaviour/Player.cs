@@ -9,6 +9,12 @@ using UnityEngine.Windows;
 namespace Cappa.Player
 {
 
+
+
+    /* Camera in future shoud projct a line passing through target and itself
+     * to the ground and on rotation "collide?" with solid objects,
+     * so the target would always stay o in sight. */
+
     public class Player : MonoBehaviour
     {
         [SerializeField] Movement movement;
@@ -84,9 +90,7 @@ namespace Cappa.Player
             var player = this;
             movement = new(ref player, ref movement.subject, movement.swiftness);
         }
-        void InitializeCamera() {
 
-        }
     }
 
 
