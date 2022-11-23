@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
-using UnityEngine.Windows;
 
 namespace Cappa.Player
 {
@@ -58,7 +56,6 @@ namespace Cappa.Player
         void Start()
         {
             InitializeMovement();
-            InitializeCamera();
         }
 
         void FixedUpdate()
