@@ -15,9 +15,12 @@
 # Jetbrains Rider
 /[Aa]ssets/Plugins/Editor/JetBrains*
 
-# Visual Studio
+# IDE
 .vs/
 .vsconfig
+
+.idea/*
+
 *.sln
 
 # Gradle cache directory
