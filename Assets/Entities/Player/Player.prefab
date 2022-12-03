@@ -307,7 +307,7 @@ MonoBehaviour:
     smoothing: 0.8
     Intolerance: 2.72
     deadzone: 10
-    centrePrecision: 10.62
+    centrePrecision: 14.22
 --- !u!20 &3769066305932895280
 Camera:
   m_ObjectHideFlags: 0

@@ -486,7 +486,7 @@ namespace Cappa.Core
             /// </summary>
             public void RotateToTarget()
             {
-
+                
                 // Smoothing conversion
                 var smooth = 1 - smoothing;
                 
@@ -495,7 +495,7 @@ namespace Cappa.Core
                 
                 // Smoothed Direction
                 var dir = Vector3.Slerp(frw, Direction, smooth);
-                
+
                 // Rotation
                 Rotate(dir);
             }
