@@ -80,7 +80,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   swiftness: 15
-  jitterPreventionDistance: 1
+  compensation: 1000
+  responsiveness: 0.5
+  jitterPreventionDistance: 0.4
   sprintSwiftnessMultiplier: 3
   acceleration: 0.3
   camera: {fileID: 8429601215337241993}
@@ -302,9 +304,10 @@ MonoBehaviour:
     comfortRadius: 1.34
   rotor:
     swiftness: 6.74
+    smoothing: 0.8
     Intolerance: 2.72
     deadzone: 10
-    centrePrecision: 0
+    centrePrecision: 10.62
 --- !u!20 &3769066305932895280
 Camera:
   m_ObjectHideFlags: 0
