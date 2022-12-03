@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   swiftness: 15
-  compensation: 1000
+  compensation: 250
   responsiveness: 0.5
   jitterPreventionDistance: 0.4
   sprintSwiftnessMultiplier: 3
@@ -303,8 +303,8 @@ MonoBehaviour:
     offset: 1
     comfortRadius: 1.34
   rotor:
-    swiftness: 6.74
-    smoothing: 0.8
+    swiftness: 3.07
+    smoothing: 0.845
     Intolerance: 2.72
     deadzone: 10
     centrePrecision: 14.22
