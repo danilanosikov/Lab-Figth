@@ -1,83 +1,267 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
+using UnityEngine.TextCore.Text;
 
 namespace Cappa.Core
 {
-    
     /* Camera in future should project a line passing through target and itself
      * to the ground and on rotation "collide?" with solid objects,
      * so the target would always stay o in sight. */
 
+    
+    /// <summary>
+    ///  Default Player Behaviour
+    /// </summary>
     public class Player : MonoBehaviour
     {
-        CharacterController Body;
-        Camera Camera;
+        
+        /// <summary>
+        /// Its body - Controller
+        /// </summary>
+        [NonSerialized] private CharacterController Body;
+        
+        /// <summary>
+        /// Player's Camera
+        /// </summary>
+        [NonSerialized] private Camera Camera;
 
-        [SerializeField] public float swiftness = 5f, jitterPreventionDistance = 1.3f;
-        [SerializeField] Transform camera;
+        
+        
+        
+        
+        
+        /// <summary>
+        /// Overall speed of the character
+        /// </summary>
+        [SerializeField] private float swiftness = 5f;
+        [SerializeField] private float compensation = 1000f;
 
-        private Vector2 Input;
-
-        Vector3 RelativeDirection
+        /// <summary>
+        /// Responsiveness of velocity feedback
+        /// </summary>
+        [SerializeField, Range(0f, 1f)] private float responsiveness = 0.5f;
+        
+        /// <summary>
+        /// Minimal distance to the camera allowed for character jerk prevention
+        /// </summary>
+        [SerializeField] private float jitterPreventionDistance = 1.3f;
+        
+        /// <summary>
+        /// Sprint Swiftness
+        /// </summary>
+        [SerializeField] private float sprintSwiftnessMultiplier = 3f;
+        
+        /// <summary>
+        /// Acceleration to the max speed on sprint
+        /// </summary>
+        [SerializeField] private float acceleration = 0.3f;
+        
+        /// <summary>
+        /// Camera world's object
+        /// </summary>
+        [SerializeField] private Transform camera;
+        
+        
+        
+        
+        
+        
+        
+        /// <summary>
+        ///     Input Conditions
+        /// </summary>
+        private Vector2 input;
+        private Vector2 Input
         {
             get
             {
-                var up = Camera.Transform.up;
+                var value = input;
+                var gets_closer = value.y < 0;
+                
+                if (gets_closer && UnderTheCamera) value.y = 0;
+                return value;
+            }
+            set => input = value;
+        }
+
+        
+        /// <summary>
+        /// Velocity Conditions
+        /// </summary>
+        private float velocity;
+        private float Velocity
+        {
+            get
+            {
+                // Convenience Measures
+                var too_fast = velocity > sprintSwiftnessMultiplier * swiftness;
+                var far_away = Camera.OutOfReach;
+                var sprinting = velocity > swiftness;
+
+                // Calculation
+                var vel = far_away switch {
+                    
+                    // Accelerate
+                    true when !too_fast => velocity + acceleration * Time.deltaTime,
+                    
+                    // Decelerate
+                    false when sprinting => velocity - acceleration * Time.deltaTime,
+                    
+                    // Keep Current
+                    _ => velocity
+                };
+
+                return vel;
+            }
+            set => velocity = value;
+        }
+        
+        
+        /// <summary>
+        /// Relative direction
+        /// </summary>
+        [SuppressMessage("ReSharper", "JoinDeclarationAndInitializer")]
+        private Vector3 Direction
+        {
+            get
+            {
+                var camera = Camera.transform;
+                
+                
+                
+                // Upward vector setup
+                var up = camera.up;
                 up.y = 0;
                 up.Normalize();
-                var forward = Camera.Transform.forward;
+                
+                
+                
+                
+                // Forward vector setup
+                var forward = camera.forward;
                 forward.y = 0;
                 forward.Normalize();
-                var right = Camera.Transform.right;
+                
+                
+                
+                
+                // Right vector setup
+                var right = camera.right;
                 right.y = 0;
                 right.Normalize();
 
-                Vector3 vertical;
-
-                if (Mathf.Abs(Input.y * forward.magnitude) > 0.8f) vertical = Input.y * forward;
-                else
+                
+                
+                
+                // Input Components Converted in Global Space
+                Vector3 vertical_component;
+                Vector3 horizontal_component;
+                
+                
+                
+                
+                
+                // Boolean Statements For Better Readability 
+                var looks_straight = Mathf.Abs(Input.y * forward.magnitude) > 0; // If player looks down - false
+                var go_forward = Input.y > 0;
+                
+                
+                
+                
+                
+                
+                
+                // Stabilisation of movement, when camera is rotated drastically + Conversion to World's space
+                vertical_component = looks_straight switch
                 {
-                    if (Input.y > 0) vertical = Input.y * up;
-                    else vertical = Vector3.zero;
-                }
+                    true => Input.y * forward,
+                    
+                    false when go_forward => Input.y * up,
+                    
+                    _ => Vector3.zero //otherwise
+                };
+                horizontal_component = Input.x * right;
+                
+                
+                
+                // Removal of Y component to ensure stability during fast and big rotations
+                var result = vertical_component + horizontal_component;
+                result.y = 0;
 
-                var horizontal = Input.x * right;
+                
+                return result;
+            }
+        }
+        
+        
+        /// <summary>
+        /// If a player is Under its camera
+        /// </summary>
+        private bool UnderTheCamera
+        {
+            get
+            {
+                // Signed distance from this to camera with no Y component for simplicity;
+                var s_dist = -Camera.Distance;
+                s_dist.y = 0;
 
-                var direction = vertical + horizontal;
-                direction.y = 0;
-
-                return direction;
+                // Absolute distance
+                var distance = Mathf.Abs(s_dist.magnitude);
+                
+                // Too Close to Camera in terms of XZ Plane
+                var close = distance < jitterPreventionDistance;
+                
+                return close;
             }
         }
 
-
-
-        void Start()
+        
+        
+        
+        
+        
+        
+        
+        
+        /// <summary>
+        /// Set-Up Method
+        /// </summary>
+        private void Start()
         {
+            // Controller Caching
             Body = gameObject.GetComponent<CharacterController>();
+            
+            // Camera Caching
             Camera = camera.gameObject.GetComponent<Camera>();
+            
+            // Initialization Block
+            Velocity = swiftness;
+            
         }
-
-        void FixedUpdate() => Move();
-        void Update() => Camera.Behave();
-
-        void OnMove(InputValue value)
+        
+        
+        /// <summary>
+        /// Called Once a global.deltaTime
+        /// </summary>
+        private void Update()
+        {
+            var vel = Mathf.Lerp(1, Velocity, responsiveness);
+            
+            Body.SimpleMove(compensation * vel * Time.deltaTime * Direction);
+        }
+        
+       
+        /// <summary>
+        /// Called On Input, Which collerates to character movement
+        /// </summary>
+        /// <param name="value"></param>
+        private void OnMove(InputValue value)
         {
             Input = value.Get<Vector2>();
         }
 
-
-        void Move()
-        {
-            var distance_to_camera = camera.position - transform.position; distance_to_camera.y = 0;
-            if(Input.y < 0 && distance_to_camera.magnitude < jitterPreventionDistance) Input.y = 0;
-            
-            Body.SimpleMove(swiftness * RelativeDirection);
-        }
-
-        
     }
 }

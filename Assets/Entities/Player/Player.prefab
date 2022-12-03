@@ -79,8 +79,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b58d1217a5cc460c9dd91b6d9dc56d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement:
-    swiftness: 15
+  swiftness: 15
+  jitterPreventionDistance: 1
+  sprintSwiftnessMultiplier: 3
+  acceleration: 0.3
   camera: {fileID: 8429601215337241993}
 --- !u!114 &5997125430126076457
 MonoBehaviour:
@@ -222,8 +224,8 @@ Transform:
   m_GameObject: {fileID: 4986224869753307127}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8429601215337241993}
   - {fileID: 4786538885203308920}
@@ -272,14 +274,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8766267710926178814}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.94, z: -5.38}
+  m_LocalRotation: {x: 0.026031906, y: 0.04429682, z: -0.0011546569, w: 0.99867857}
+  m_LocalPosition: {x: -0.76, y: 3.91, z: -1.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4986224869753307122}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 2.986, y: 5.079, z: 0}
 --- !u!114 &1081021125994045842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,13 +296,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 4786538885203308920}
   follower:
-    swiftness: 3.29
-    minimalRadius: 7.2
+    swiftness: 3.37
+    intolerance: 2.72
+    offset: 1
+    comfortRadius: 1.34
   rotor:
     swiftness: 6.74
+    Intolerance: 2.72
     deadzone: 10
-    centrePercesion: 0
-    focusOffset: {x: 0, y: 0, z: 0}
+    centrePrecision: 0
 --- !u!20 &3769066305932895280
 Camera:
   m_ObjectHideFlags: 0
@@ -312,12 +316,12 @@ Camera:
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
+  m_projectionMatrixMode: 2
   m_GateFitMode: 2
   m_FOVAxisMode: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
+  m_SensorSize: {x: 70.41, y: 52.63}
+  m_LensShift: {x: -0.25, y: 0.03}
+  m_FocalLength: 12.664553
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -326,7 +330,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 100
-  field of view: 60
+  field of view: 128.6
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
