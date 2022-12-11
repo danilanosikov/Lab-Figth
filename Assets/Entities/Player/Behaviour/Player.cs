@@ -62,7 +62,7 @@ namespace Cappa.Core
         /// <summary>
         /// Camera world's object
         /// </summary>
-        [SerializeField] private Transform camera;
+        [SerializeField] private new Transform camera;
         
         
         

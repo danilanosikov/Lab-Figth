@@ -2,8 +2,8 @@
     "name": "Entity.Player",
     "rootNamespace": "Cappa.Player",
     "references": [
-        "GUID:a43c53ac4d1504c6a9dee0d7783da00a",
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:197dfc3bbf1cf4fc4b5653cf3d3103eb"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

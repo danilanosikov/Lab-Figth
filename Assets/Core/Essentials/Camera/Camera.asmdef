@@ -1,9 +1,7 @@
 {
-    "name": "Core.Essentials",
-    "rootNamespace": "Cappa",
-    "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c"
-    ],
+    "name": "Core.Essentials.Camera",
+    "rootNamespace": "",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
