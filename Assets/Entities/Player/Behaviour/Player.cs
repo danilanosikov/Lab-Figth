@@ -1,9 +1,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
-using UnityEngine.TextCore.Text;
 
 namespace Cappa.Core
 {
@@ -63,13 +62,11 @@ namespace Cappa.Core
         /// Camera world's object
         /// </summary>
         [SerializeField] private new Transform camera;
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
         /// <summary>
         ///     Input Conditions
         /// </summary>
@@ -114,7 +111,7 @@ namespace Cappa.Core
                     _ => velocity
                 };
 
-                return vel;
+                return Mathf.Abs(vel);
             }
             set => velocity = value;
         }
@@ -250,7 +247,7 @@ namespace Cappa.Core
         {
             var vel = Mathf.Lerp(1, Velocity, responsiveness);
             
-            Body.SimpleMove(compensation * vel * Time.deltaTime * Direction);
+            Body.SimpleMove(vel * Direction); // Not delta in time required
         }
         
        
@@ -258,6 +255,7 @@ namespace Cappa.Core
         /// Called On Input, Which collerates to character movement
         /// </summary>
         /// <param name="value"></param>
+        [UsedImplicitly]
         private void OnMove(InputValue value)
         {
             Input = value.Get<Vector2>();

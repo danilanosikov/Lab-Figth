@@ -26,7 +26,7 @@ namespace Cappa.Core
         /// Client Launch Button.
         /// </summary>
         private Button Client => Root.Q<Button>("Client");
-        
+
         /// <summary>
         /// Tells whether application has its network role.
         /// </summary>
@@ -34,37 +34,34 @@ namespace Cappa.Core
         /// <summary>
         /// Tells whether menu is closed.
         /// </summary>
-        private bool Closed => !Root.visible;
+        private bool Closed { get; set; }
+
 
         /// <summary>
-        /// Entry Point
+        /// Entry Points
         /// </summary>
+        private void Start() => Closed = false;
         private void OnEnable() => ListenForSelection();
-        
+
         /// <summary>
         /// Closes Main Menu (Hides it, for now)
         /// </summary>
         private void CloseMenu()
         {
+            if (Closed) return;
             GUI.gameObject.SetActive(false);
+            Closed = true;
         }
-
+        
         /// <summary>
         /// Waits, until user decides if they are a client or a server.
         /// </summary>
         private void ListenForSelection()
         {
-            Debug.Log("Menu is closed: " + Closed);
-            
             if (Closed) return;
-
             ListenForHostSelection();
             ListenClientForSelection();
         }
-
-        /// <summary>
-        /// Listens if user chose his net role.
-        /// </summary>
         private void ListenForHostSelection()
         {
 
@@ -77,12 +74,11 @@ namespace Cappa.Core
             };
         
         }
-
         private void ListenClientForSelection()
         {
             
-            Client.clicked += () =>
-            {
+            Client.clicked += () => {
+                
                 NetworkManager.Singleton.StartClient();
                 
                 CloseMenu();
