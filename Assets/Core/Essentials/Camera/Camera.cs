@@ -77,16 +77,16 @@ namespace Cappa.Core
             rotor.RotateToTarget();
         }
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
         /// <summary>
         /// Following Logic
         /// </summary>
@@ -122,6 +122,12 @@ namespace Cappa.Core
             /// The rate of inconvenience growth, depending on the distance to the comfort radius border
             /// </summary>
             [Range(0f, 6f)] public float intolerance = 2.72f;
+            
+            
+            /// <summary>
+            /// How drastically camera will accelerate
+            /// </summary>
+            [Range(0f, 6f)] public float stiffness = 1.61f;
             
             /// <summary>
             /// Camera height offset
@@ -168,42 +174,53 @@ namespace Cappa.Core
             
             
             /// <summary>
-            /// Velocity Conditions
+            /// Velocity, which is composite of Stress and Swiftness.
+            /// Zero if target is in reach.
             /// </summary>
             private Vector3 Velocity
             {
                 get
                 {
                     // Distance to target
-                    var cam_dist = camera.Distance;
+                    var dist = Mathf.Abs(camera.Distance.magnitude);
                     
-                    // Direction to target
-                    var dir = cam_dist.normalized;
+                    var dir = camera.Distance.normalized;
                     
-                    // Distance to the comfort circle border
-                    var b_dist = Mathf.Abs(Mathf.Abs(cam_dist.magnitude) - comfortRadius);
+                    var vel = dist * Stress * swiftness * dir;
                     
-                    // Inconvenience, growing bigger, the further target goes out of the convenience circle
-                    var inc = Mathf.Pow(intolerance, Mathf.Sqrt(b_dist));
-                    
-                    // Predicted way to next position
-                    var step = swiftness * inc * dir;
-                    
-                    return OutOfReach ? step : Vector3.zero;
+                    return OutOfReach ? vel : Vector3.zero;
                 }
             }
 
             
             
             
-            
-            
-            
-            
-            
-            
-            
-            
+            /// <summary>
+            /// Stress, which grows larger, the further target gets away from the camera's convenience radius
+            /// </summary>
+            private float Stress
+            {
+                get
+                {
+                    // Distance to target
+                    var dist = Mathf.Abs(camera.Distance.magnitude);
+                    
+                    // Distance to the comfort circle border
+                    var b_dist =  Mathf.Abs(dist - comfortRadius);
+                    
+                    var pow = stiffness * Mathf.Sqrt(stiffness * b_dist);
+                    
+                    var inconvenience = Mathf.Pow(intolerance, pow);
+
+                    return inconvenience;
+                }
+            }
+
+
+
+
+
+
             /// <summary>
             /// Follow the target
             /// </summary>

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +15,7 @@ namespace Cappa.Core
     /// <summary>
     ///  Default Player Behaviour
     /// </summary>
-    public class Player : MonoBehaviour
+    public class Player : NetworkBehaviour
     {
         
         /// <summary>
@@ -26,17 +27,11 @@ namespace Cappa.Core
         /// Player's Camera
         /// </summary>
         [NonSerialized] private Camera Camera;
-
-        
-        
-        
-        
         
         /// <summary>
         /// Overall speed of the character
         /// </summary>
         [SerializeField] private float swiftness = 5f;
-        [SerializeField] private float compensation = 1000f;
 
         /// <summary>
         /// Responsiveness of velocity feedback
@@ -62,9 +57,6 @@ namespace Cappa.Core
         /// Camera world's object
         /// </summary>
         [SerializeField] private new Transform camera;
-
-
-
 
 
         /// <summary>
@@ -214,13 +206,6 @@ namespace Cappa.Core
                 return close;
             }
         }
-
-        
-        
-        
-        
-        
-        
         
         
         /// <summary>
@@ -245,20 +230,21 @@ namespace Cappa.Core
         /// </summary>
         private void Update()
         {
+            if (!IsOwner) return;
+            
             var vel = Mathf.Lerp(1, Velocity, responsiveness);
             
             Body.SimpleMove(vel * Direction); // Not delta in time required
         }
-        
-       
+
+
         /// <summary>
         /// Called On Input, Which collerates to character movement
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="trigger"></param>
         [UsedImplicitly]
-        private void OnMove(InputValue value)
-        {
-            Input = value.Get<Vector2>();
+        public void OnMove(InputAction.CallbackContext trigger) {
+            Input = trigger.ReadValue<Vector2>();
         }
 
     }
