@@ -1361,11 +1361,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ProtocolType: 0
-  m_MaxPacketQueueSize: 128
+  m_MaxPacketQueueSize: 32
   m_MaxPayloadSize: 6144
   m_HeartbeatTimeoutMS: 500
   m_ConnectTimeoutMS: 1000
-  m_MaxConnectAttempts: 60
+  m_MaxConnectAttempts: 5
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
     Address: 127.0.0.1
@@ -1401,19 +1401,19 @@ MonoBehaviour:
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
-    TickRate: 30
-    ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
+    TickRate: 32
+    ClientConnectionBufferTimeout: 30
     ConnectionData: 
     EnableTimeResync: 0
     TimeResyncInterval: 30
-    EnsureNetworkVariableLengthSafety: 0
-    EnableSceneManagement: 1
+    EnsureNetworkVariableLengthSafety: 1
+    EnableSceneManagement: 0
     ForceSamePrefabs: 1
     RecycleNetworkIds: 1
     NetworkIdRecycleDelay: 120
     RpcHashSize: 0
-    LoadSceneTimeOut: 120
+    LoadSceneTimeOut: 60
     SpawnTimeout: 1
     EnableNetworkLogs: 1
 --- !u!4 &2143579669

@@ -3,7 +3,10 @@
     "rootNamespace": "Cappa.Player",
     "references": [
         "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:197dfc3bbf1cf4fc4b5653cf3d3103eb"
+        "GUID:197dfc3bbf1cf4fc4b5653cf3d3103eb",
+        "GUID:3b8ed52f1b5c64994af4c4e0aa4b6c4b",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:9f4f5bf029cebb64f983b7bdc29f62a1"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
