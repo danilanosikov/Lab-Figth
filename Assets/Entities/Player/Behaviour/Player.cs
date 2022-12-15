@@ -58,15 +58,6 @@ namespace Cappa.Core
         /// </summary>
         [SerializeField] private new Transform camera;
 
-        
-        /// <summary>
-        /// Checks whether the entity, which tries to access this doesn't have an authority to do so
-        /// </summary>
-        private bool CalledByAlien => !IsOwner || !IsLocalPlayer;
-
-
-
-
 
         /// <summary>
         ///     Input Conditions
@@ -239,7 +230,7 @@ namespace Cappa.Core
         /// </summary>
         private void Update()
         {
-            if (CalledByAlien) return;
+            if (!IsOwner) return;
             
             var vel = Mathf.Lerp(1, Velocity, responsiveness);
             
@@ -252,9 +243,7 @@ namespace Cappa.Core
         /// </summary>
         /// <param name="trigger"></param>
         [UsedImplicitly]
-        public void OnMove(InputAction.CallbackContext trigger)
-        {
-            if (CalledByAlien) return;
+        public void OnMove(InputAction.CallbackContext trigger) {
             Input = trigger.ReadValue<Vector2>();
         }
 
