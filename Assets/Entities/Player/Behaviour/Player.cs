@@ -59,6 +59,9 @@ namespace Cappa.Core
         [SerializeField] private new Transform camera;
 
 
+        
+       
+
         /// <summary>
         ///     Input Conditions
         /// </summary>
@@ -186,6 +189,7 @@ namespace Cappa.Core
         }
         
         
+        
         /// <summary>
         /// If a player is Under its camera
         /// </summary>
@@ -218,6 +222,9 @@ namespace Cappa.Core
             
             // Camera Caching
             Camera = camera.gameObject.GetComponent<Camera>();
+
+            // Sets player's camera active if player is ran by a local machine
+            camera.gameObject.SetActive(IsLocalPlayer);
             
             // Initialization Block
             Velocity = swiftness;
