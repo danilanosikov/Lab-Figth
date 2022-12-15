@@ -106,7 +106,11 @@ namespace Cappa.Core
                     _ => velocity
                 };
 
-                return Mathf.Abs(vel);
+                var abs = Mathf.Abs(vel);
+
+                var result = Mathf.Lerp(1, abs, responsiveness);
+                
+                return result;
             }
             set => velocity = value;
         }
@@ -187,9 +191,9 @@ namespace Cappa.Core
                 return result;
             }
         }
-        
-        
-        
+
+
+
         /// <summary>
         /// If a player is Under its camera
         /// </summary>
@@ -239,9 +243,15 @@ namespace Cappa.Core
         {
             if (!IsOwner) return;
             
-            var vel = Mathf.Lerp(1, Velocity, responsiveness);
-            
-            Body.SimpleMove(vel * Direction); // Not delta in time required
+            Move();
+        }
+
+        /// <summary>
+        /// Moves player in current direction
+        /// </summary>
+        private void Move()
+        {
+            Body.SimpleMove(Velocity * Direction);
         }
 
 
