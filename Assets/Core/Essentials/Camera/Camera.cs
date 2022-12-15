@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Cappa.Core
 {
@@ -16,16 +15,39 @@ namespace Cappa.Core
         /// </summary>
         [SerializeField] private Transform target;
         
+        
+        
         /// <summary>
         /// follower module
         /// </summary>
         [SerializeField] private Follower follower;
+        
+        
+        
         
         /// <summary>
         /// Rotation module
         /// </summary>
         [SerializeField] private Rotor rotor;
 
+        
+        
+
+        /// <summary>
+        /// Unity Camera Component
+        /// </summary>
+        private UnityEngine.Camera U_Camera
+        {
+            get
+            {
+                var host = gameObject;
+                var u_cam = host.GetComponent<UnityEngine.Camera>();
+                    
+                return u_cam;
+            }
+        }
+        
+        
 
         /// <summary>
         /// Distance to the target
@@ -58,6 +80,8 @@ namespace Cappa.Core
             // IDE Optimisation Suggestion
             var transform = this.transform;
             var target = this.target;
+            var follower = this.follower;
+            var rotor = this.rotor;
             
             // Follower Initialization
             follower.target = target;
@@ -66,7 +90,10 @@ namespace Cappa.Core
             //Rotor initialization
             rotor.target = target;
             rotor.camera = transform;
+            rotor.u_camera = U_Camera;
         }
+        
+        
 
         /// <summary>
         /// Called Each Frame
@@ -76,8 +103,6 @@ namespace Cappa.Core
             follower.FollowTarget();
             rotor.RotateToTarget();
         }
-
-
 
 
 
@@ -265,14 +290,16 @@ namespace Cappa.Core
             /// The target, to which this rotor should rotate to
             /// </summary>
             [NonSerialized] public Transform target;
+            
+            /// <summary>
+            /// Unity Camera
+            /// </summary>
+            [NonSerialized] public UnityEngine.Camera u_camera;
 
-            
-            
-            
-            
-            
-            
-            
+
+
+
+
             /// <summary>
             /// Regular speed of rotation
             /// </summary>
@@ -297,30 +324,7 @@ namespace Cappa.Core
             /// How big centre would be considered - zero would give a "pin-point precision"
             /// </summary>
             [SerializeField] [Range(0f, 15f)] private float centrePrecision;
-
-
             
-            
-            
-            
-            
-            
-            
-            
-            
-            /// <summary>
-            /// Unity Camera Component
-            /// </summary>
-            private UnityEngine.Camera Camera
-            {
-                get
-                {
-                    var host = camera.gameObject;
-                    var u_cam = host.GetComponent<UnityEngine.Camera>();
-                    
-                    return u_cam;
-                }
-            }
             
             /// <summary>
             /// Direction to Target
@@ -366,7 +370,7 @@ namespace Cappa.Core
             /// <summary>
             /// Field of view
             /// </summary>
-            private float FOV => Camera.fieldOfView;
+            private float FOV => u_camera.fieldOfView;
             
             /// <summary>
             /// Angle from camera look direction, projected on XY plane and
@@ -466,13 +470,6 @@ namespace Cappa.Core
                     return result;
                 }
             }
-
-            
-            
-            
-            
-            
-            
             
 
             /// <summary>
@@ -516,8 +513,6 @@ namespace Cappa.Core
                 // Rotation
                 Rotate(dir);
             }
-            
-            
         }
         
         
