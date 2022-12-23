@@ -1,5 +1,38 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1035234983417072949
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6478725504469511480}
+  m_Layer: 0
+  m_Name: Behaviour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6478725504469511480
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035234983417072949}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 20, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8429601215337241993}
+  - {fileID: 4786538885203308920}
+  m_Father: {fileID: 4986224869753307122}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2804917005498124049
 GameObject:
   m_ObjectHideFlags: 0
@@ -15,7 +48,7 @@ GameObject:
   - component: {fileID: 5997125430126076457}
   - component: {fileID: 2639028200661077492}
   m_Layer: 0
-  m_Name: Behaviour
+  m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,13 +61,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2804917005498124049}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -1.1641532e-10, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4986224868547246131}
-  m_Father: {fileID: 4986224869753307122}
+  m_Father: {fileID: 6478725504469511480}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &6026205702733111025
@@ -315,12 +348,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4986224869753307127}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 8429601215337241993}
-  - {fileID: 4786538885203308920}
+  - {fileID: 6478725504469511480}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -367,11 +399,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8766267710926178814}
   m_LocalRotation: {x: 0.026031906, y: 0.04429682, z: -0.0011546569, w: 0.99867857}
-  m_LocalPosition: {x: -0.76, y: 3.91, z: -1.3}
+  m_LocalPosition: {x: -1.54, y: 1.29, z: -1.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4986224869753307122}
+  m_Father: {fileID: 6478725504469511480}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 2.986, y: 5.079, z: 0}
 --- !u!114 &1081021125994045842
@@ -392,7 +424,7 @@ MonoBehaviour:
     intolerance: 2.72
     stiffness: 0.23
     offset: 1
-    comfortRadius: 1.34
+    comfortRadius: 4.8
   rotor:
     swiftness: 3.07
     smoothing: 0.845
@@ -415,7 +447,7 @@ Camera:
   m_FOVAxisMode: 0
   m_SensorSize: {x: 70.41, y: 52.63}
   m_LensShift: {x: -0.25, y: 0.03}
-  m_FocalLength: 12.664553
+  m_FocalLength: 9.318632
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -424,7 +456,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 100
-  field of view: 128.6
+  field of view: 141
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
