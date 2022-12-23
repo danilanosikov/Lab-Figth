@@ -58,10 +58,6 @@ namespace Cappa.Core
         /// </summary>
         [SerializeField] private new Transform camera;
 
-
-        
-       
-
         /// <summary>
         ///     Input Conditions
         /// </summary>
@@ -193,7 +189,6 @@ namespace Cappa.Core
         }
 
 
-
         /// <summary>
         /// If a player is Under its camera
         /// </summary>
@@ -242,7 +237,6 @@ namespace Cappa.Core
         private void Update()
         {
             if (!IsOwner) return;
-            
             Move();
         }
 
